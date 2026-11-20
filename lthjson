@@ -1,0 +1,117 @@
+{
+	"app":	{
+		"graphicsShaderFileName":	".\\lth.gfx.glsl",
+		"soundShaderFileName":	"",
+		"sointuFileName":	"..\\aep2026\\sound\\blightanddark_04.yml",
+		"wavFileName":	"..\\aep2026\\sound\\blightanddark_04.wav",
+		"xReso":	1280,
+		"yReso":	720
+	},
+	"camera":	{
+		"vec3Pos":	[-11.342710494995117, 3.9363367557525635, -0.41166225075721741],
+		"vec3Ang":	[-0.18999995291233063, -1.9149839878082275, 0],
+		"fovYInRadians":	0.47455504536628723
+	},
+	"captureScreenShotSettings":	{
+		"fileName":	"..\\aep2026\\output\\ss_v2.png",
+		"xReso":	3840,
+		"yReso":	2160,
+		"replaceAlphaWithOne":	true
+	},
+	"captureCubemapSettings":	{
+		"fileName":	"",
+		"reso":	512
+	},
+	"renderSettings":	{
+		"pixelFormat":	1,
+		"enableMultipleRenderTargets":	true,
+		"numEnabledRenderTargets":	4,
+		"enableBackBuffer":	true,
+		"enableMipmapGeneration":	true,
+		"textureFilter":	1,
+		"textureWrap":	1,
+		"enableSwapIntervalControl":	true,
+		"swapInterval":	2
+	},
+	"preferenceSettings":	{
+		"enableAutoRestartByGraphicsShader":	true,
+		"enableAutoRestartBySoundShader":	true
+	},
+	"timelineSettings":	{
+		"bpm":	140,
+		"displayMode":	1
+	},
+	"executableExportSettings":	{
+		"fileName":	"..\\aep2026\\output\\lth.exe",
+		"xReso":	1280,
+		"yReso":	720,
+		"durationInSeconds":	128.57142639160156,
+		"numSoundBufferSamples":	5672960,
+		"numSoundBufferAvailableSamples":	5672960,
+		"numSoundBufferSamplesPerDispatch":	4096,
+		"enableFrameCountUniform":	true,
+		"enableSoundDispatchWait":	true,
+		"shaderMinifierOptions":	{
+			"enableFieldNames":	true,
+			"fieldNameIndex":	0,
+			"noRenaming":	false,
+			"enableNoRenamingList":	false,
+			"noRenamingList":	"main",
+			"noSequence":	false,
+			"smoothstep":	false
+		},
+		"crinklerOptions":	{
+			"compMode":	2,
+			"hashTries":	300,
+			"orderTries":	300,
+			"useTinyHeader":	false,
+			"useTinyImport":	false
+		}
+	},
+	"recordImageSequenceSettings":	{
+		"directoryName":	"..\\..\\lth_4k",
+		"xReso":	3840,
+		"yReso":	2160,
+		"startTimeInSeconds":	0,
+		"durationInSeconds":	128.57142639160156,
+		"framesPerSecond":	60,
+		"replaceAlphaWithOne":	true
+	},
+	"captureSoundSettings":	{
+		"fileName":	"..\\aep2026\\sound\\blightanddark_01_minimalgl_v3.wav",
+		"durationInSeconds":	87.428573608398438
+	},
+	"imGuiStatus":	{
+		"displayCurrentStatus":	true,
+		"displayCameraSettings":	true,
+		"forceUpdateWhilePaused":	false
+	},
+	"userTextures":	[{
+			"fileName":	""
+		}, {
+			"fileName":	""
+		}, {
+			"fileName":	""
+		}, {
+			"fileName":	""
+		}],
+	"userUniformDb":	{
+		"categories":	[{
+				"uniforms":	[{
+						"location":	16,
+						"name":	"debugLightCount",
+						"sliderInt":	12
+					}, {
+						"location":	17,
+						"name":	"debugParam1",
+						"sliderFloat":	0
+					}, {
+						"location":	18,
+						"name":	"debugParam2",
+						"sliderFloat":	0
+					}]
+			}, {
+				"uniforms":	[]
+			}]
+	}
+}
