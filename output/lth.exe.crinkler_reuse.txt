@@ -1,0 +1,71 @@
+
+# Code models
+00:1 80:2 40:1 C0:3 20:0 A0:1 60:1 90:2 50:1 B0:3 88:2 DE:6 01:0
+
+# Data models
+00:1 80:1 40:0 C0:2 60:1 10:0 B0:4 04:0 89:3 C1:3 13:2
+
+# Text models
+00:1 80:2 40:0 C0:3 30:0 A0:1 60:0 E0:2 9C:3 B8:3 D0:1 58:1 CC:3 AC:2 52:1 5C:2 02:0 C2:2 A2:1 92:1 D2:2
+
+# Code sections
+Crinkler import:.text:_Import
+MAIN.OBJ:.entrypoint:?entrypoint@@YAXXZ
+SOINTU.OBJ:.su_load_gmdls:_su_load_gmdls@0
+SOINTU.OBJ:.su_render_song:_su_render_song@4
+SOINTU.OBJ:.su_update_voices:su_update_voices
+SOINTU.OBJ:.su_effects_stereohelper:su_effects_stereohelper
+SOINTU.OBJ:.su_op_distort:su_op_distort
+SOINTU.OBJ:.su_oscillat_sine:su_oscillat_sine
+SOINTU.OBJ:.su_oscillat_trisaw:su_oscillat_trisaw
+SOINTU.OBJ:.su_op_xch:su_op_xch
+SOINTU.OBJ:.su_op_dbgain:su_op_dbgain
+SOINTU.OBJ:.su_op_oscillator:su_op_oscillator
+SOINTU.OBJ:.su_op_filter:su_op_filter
+SOINTU.OBJ:.su_op_in:su_op_in
+SOINTU.OBJ:.su_run_vm:su_run_vm
+SOINTU.OBJ:.su_op_noise:su_op_noise
+SOINTU.OBJ:.su_op_mulp:su_op_mulp
+SOINTU.OBJ:.su_op_compressor:su_op_compressor
+SOINTU.OBJ:.su_op_delay:su_op_delay
+SOINTU.OBJ:.su_op_envelope:su_op_envelope
+SOINTU.OBJ:.su_op_push:su_op_push
+SOINTU.OBJ:.su_op_out:su_op_out
+SOINTU.OBJ:.su_op_outaux:su_op_outaux
+SOINTU.OBJ:.su_nonlinear_map:su_nonlinear_map
+SOINTU.OBJ:.su_op_addp:su_op_addp
+SOINTU.OBJ:.su_op_delay_do:su_op_delay_do
+SOINTU.OBJ:.su_oscillat_sample:su_oscillat_sample
+SOINTU.OBJ:.su_op_send:su_op_send
+SOINTU.OBJ:.su_op_pan:su_op_pan
+
+# Data sections
+SOINTU.OBJ:.su_vm_transformcounts:su_vm_transformcounts
+SOINTU.OBJ:.su_patch_opcodes:su_patch_opcodes
+MAIN.OBJ:.s_pixelFormatDescriptor:?s_pixelFormatDescriptor@@3PAIA
+SOINTU.OBJ:.su_patch_operands:su_patch_operands
+SOINTU.OBJ:.constants:FCONST_0_00781250
+SOINTU.OBJ:.su_sample_offsets:su_sample_offsets
+SOINTU.OBJ:.su_delay_times:su_delay_times
+SOINTU.OBJ:.su_vm_jumptable:su_vm_jumptable
+SOINTU.OBJ:.su_tracks:su_tracks
+MAIN.OBJ:.s_screenSettings:?s_screenSettings@@3U_devicemodeA@@A
+SOINTU.OBJ:.su_patterns:su_patterns
+MAIN.OBJ:.s_mmTime:?s_mmTime@@3Ummtime_tag@@A
+MAIN.OBJ:.s_waveHeader:?s_waveHeader@@3Uwavehdr_tag@@A
+MAIN.OBJ:.s_waveFormat:?s_waveFormat@@3UtWAVEFORMATEX@@A
+
+# Text sections
+SOINTU.OBJ:.su_gmdls_path1:su_gmdls_path1
+DLLNamesHunk:_DLLNames
+MAIN.OBJ:s_concatenatedString:_g_concatenatedString_align0
+
+# Uninitialized sections
+SOINTU.OBJ:.susamtable:su_sample_table
+ImportListHunk:_ImportList
+Crinkler import:constants:.absolut
+SOINTU.OBJ:.synth_object:su_synth_obj
+MAIN.OBJ:.bss:?s_sointuSoundBuffer@@3PAMA
+
+# Hash table size
+314563246
