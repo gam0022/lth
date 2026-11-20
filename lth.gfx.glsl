@@ -152,15 +152,6 @@ vec2 referenceLUTUv(vec2 uv, bool matrix)
 
 const uint C_HASH = 20242024u;
 
-float hash12(vec2 p)
-{
-    uvec2 x = floatBitsToUint(p);
-    x = C_HASH * ((x >> 8u) ^ x.yx);
-    x = C_HASH * ((x >> 8u) ^ x.yx);
-    x = C_HASH * ((x >> 8u) ^ x.yx);
-    return float(x.x) / float(0xffffffffu);
-}
-
 vec4 hash42(vec2 p)
 {
     uvec4 x = floatBitsToUint(vec4(p, 1.0, 2.0));
@@ -228,33 +219,6 @@ float sdBox(vec3 p, vec3 halfSize)
     return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
 }
 
-float dMenger(vec3 z0, vec3 offset, float scale, int iteration) {
-    float s = 2.0;
-    vec4 z = vec4(z0 / s, 1.0);
-    for (int n = 0; n < iteration; n++) {
-        z = abs(z);
-
-        if (z.x < z.y) z.xy = z.yx;
-        if (z.x < z.z) z.xz = z.zx;
-        if (z.y < z.z) z.yz = z.zy;
-
-        z *= scale;
-        z.xyz -= offset * (scale - 1.0);
-
-        if (z.z < -0.5 * offset.z * (scale - 1.0)) {
-            z.z += offset.z * (scale - 1.0);
-        }
-    }
-
-    float d1 = sdBox(z.zxy, vec3(1)) / z.w * s;
-    // float d2 = sdBox(z.zxy, vec3(0.1, 1.1, 0.9)) / z.w * s;
-    // vec4 m = vec4(d1, M_BASE, 0.1, 0);
-    // float hue = 1. + fract(length(z0.xy) * 0.2 + beat / 8.);
-    // U(m, d2, M_EMI, 4.0 * saturate(cos(length(z0.xyz) / 4. * TAU + beatTau / 2.)), hue);
-    // return m;
-    return d1;
-}
-
 float dRope(vec3 p) {
     vec2 p1 = p.xz;
 
@@ -262,7 +226,6 @@ float dRope(vec3 p) {
 
     // int sampleIndex = adjustedWaveOutPosition % NUM_SOUND_BUFFER_SAMPLES;
     // vec2 wave = abs(waveOutSamples[sampleIndex]);
-    // float vibe = (hash12(floor(8. * p1)) - 0.5) * wave.x * 4.;
     // float time = beat + vibe;
     // p1.x += vibe;
 
@@ -324,7 +287,6 @@ float dCenterObject(vec3 p)
     // p -= vec3(0, 1.5, 0);
     // float s = 0.4;
 
-    // float d = dMenger(p / s, offset, scale, 3) * s;
 
     float d = 1e7;
 
@@ -336,84 +298,6 @@ float dCenterObject(vec3 p)
     }
 
     return d;
-}
-
-// https://www.shadertoy.com/view/4ltfDr
-vec3 traveler(vec2 p, float z)
-{
-    vec2 q = (fract(p / 10.0) - 0.5) * 10.0;
-    float d = 9999.0;
-    for (int i = 0; i < 3; ++i) {
-        q = abs(q) - 0.5;
-        q *= rot(0.785398);
-        q = abs(q) - 0.5;
-        q *= rot(z * 0.5);
-        float k = sdRect(q, vec2(1.0, 0.55 + q.x));
-        d = min(d, k);
-    }
-    float f = 1.0 / (1.0 + abs(d));
-    return vec3(step(0.9, f));
-}
-
-// Hexagons - distance by iq
-// https://www.shadertoy.com/view/Xd2GR3
-// return xy: 2d cell id (vec2), z: distance to border, w: distance to center
-#define INV_SQRT3 0.5773503
-vec4 hexagon(inout vec2 p) {
-    vec2 q = vec2(p.x * 2. * INV_SQRT3, p.y + p.x * INV_SQRT3);
-
-    vec2 pi = floor(q);
-    vec2 pf = fract(q);
-
-    float v = mod(pi.x + pi.y, 3.);
-
-    float ca = step(1., v);
-    float cb = step(2., v);
-    vec2 ma = step(pf.xy, pf.yx);
-
-    // distance to borders
-    float e = dot(ma, 1. - pf.yx + ca * (pf.x + pf.y - 1.) + cb * (pf.yx - 2. * pf.xy));
-
-    // distance to center
-    p = vec2(q.x + floor(.5 + p.y / 1.5), 4. * p.y / 3.) * .5 + .5;
-    p = (fract(p) - .5) * vec2(1., .85);
-    float f = length(p);
-
-    return vec4(pi + ca - cb * ma, e, f);
-}
-
-float warning(vec2 p) {
-    vec4 h = hexagon(p);
-
-    float f = fract(hash12(h.xy) + beatPhase);
-    f = mix(f, saturate(sin(h.x - h.y + 4. * beatPhase)), .5 + .5 * sin(beatTau / 16.));
-    float hex = smoothstep(.1, .11, h.z) * f;
-
-    float mark = 1.;
-    float dice = fract(hash12(h.xy) + beatPhase / 4.);
-
-    if (dice < .25) {
-        float d = sdRect(p, vec2(.4, dice));
-        float ph = phase(beat / 2. + f);
-        float ss = smoothstep(1., 1.05, mod(p.x * 10. + 10. * p.y + 8. * ph, 2.));
-        mark = saturate(step(0., d) + ss);
-    } else {
-        vec4 param_array[8] = vec4[8](vec4(140., 72., 0., 0.), vec4(0., 184., 482, 0.), vec4(0., 0., 753., 0.), vec4(541., 156., 453., 0.), vec4(112., 0., 301., 0.),  // 0-3
-                                    vec4(311., 172., 50., 0.), vec4(249., 40., 492., 0.), vec4(0.));                                                       // 4-7
-
-        vec4 param = param_array[int(mod(dice * 33.01, 8.))] / vec2(1200., 675.).xyxy;
-        // param = PU;
-        vec2 p1 = p - param.xy;
-        for (int i = 0; i < 3; i++) {
-            p1 = abs(p1 + param.xy) - param.xy;
-            p1 *= rot(TAU * param.z);
-        }
-
-        float d = sdRect(p1, vec2(.2, .05));
-        mark = saturate(smoothstep(0., .01, d));
-    }
-
-    return saturate(hex * mark);
 }
 
 // サイズ削減のため、120個のvec2からなるロゴ頂点をfloat配列に平坦化し、参照時にvec2へ復元する
@@ -644,9 +528,7 @@ vec3 emissionPattern(vec4 uv, int lightIndex)
     }
 
     {
-        // col = vec3(1, 0.01, 0.01) * warning(p2 * 4. + vec2(lightIndex, 0));
         // col = hash42(uv).rgb * 0.1;
-        // col = pal(1.1) * traveler(p2 * 10.0, 113.09 + 5 * cos(beatTau / 32.0) - 20.0 * hash12(vec2(lightIndex, 0.0)));
     }
 
     return 1.6 * col;
