@@ -224,13 +224,6 @@ float dRope(vec3 p) {
 
     p1 = abs(p.xz);
 
-    // int sampleIndex = adjustedWaveOutPosition % NUM_SOUND_BUFFER_SAMPLES;
-    // vec2 wave = abs(waveOutSamples[sampleIndex]);
-    // float time = beat + vibe;
-    // p1.x += vibe;
-
-    // vec2 q = vec2(saturate(sin(p.y - beatTau / 16)));
-
     float final = step(256, beat);
 
     vec2 q = vec2(mix(1, p.y, smoothstep(208, 210, beat)));
@@ -248,7 +241,6 @@ float dRope(vec3 p) {
         p1 *= rot(th);
         p1 = abs(p1);
         m *= 0.4 + 0.1 * sin(p.y - beatTau / (4 + 12 * final));
-        // m -= 0.008;
 
         // if (i > 0) d = min(d, sdRect(p1, vec2(m)));  // 四角いツル
         if (i > 0) d = min(d, length(p1) - m);
@@ -274,20 +266,6 @@ float dIFS(vec3 pos) {
 
 float dCenterObject(vec3 p)
 {
-    // vec3 offset = vec3(1.5, 2.2, 0.7 + 2.5 * (0.5 + 0.5 * cos(beatTau / 16.)));
-    // float scale = 2.2;
-
-    // vec3 offset2 = vec3(1.0);
-    // float scale2 = 3.1;
-
-    // float blend = 0.5 + 0.5 * cos(beatTau / 8.);
-    // offset = mix(offset, offset2, blend);
-    // scale = mix(scale, scale2, blend);
-
-    // p -= vec3(0, 1.5, 0);
-    // float s = 0.4;
-
-
     float d = 1e7;
 
     if (inRange(beat, 120, 300))
@@ -384,12 +362,9 @@ vec3 logoPolygon(vec2 p, int lightIndex, int offset, int count)
     for (int i = offset; i < offset + count; ++i) {
         float d = polygon(p, logoOffsets[i], logoOffsets[i + 1] - logoOffsets[i]);
         float intensity = 1.0;
-        // if (inRange(beat, 0, 24)) intensity = step(i, floor((nBeat / 8) * 3 - 3));
         if (inRange(beat, 0, 31)) intensity = step(i, (nBeat / 8) * 3 - 3 + min(int(mod(beat, 8.) * 8.), 2 + nBeat / 24));
         if (inRange(beat, 31, 32)) intensity = saturate(cos(beatTau * 8));
         if (inRange(beat, 100, 104)) intensity = saturate(sin(beatTau)) * (nBeat % 4 < 3 ? 1 : 0);
-        // if (inRange(beat, 200, 212)) intensity = level;
-        // if (inRange(beat, 192, 208)) intensity = 1.5 * saturate(sin(beatTau)) * (nBeat % 4 < 3 ? 1 : 0);
         if (inRange(beat, 256, 300)) intensity = step(floor(((nBeat - 256) / 8) * 4), i - offset + 3);
         float h = 4.5;
         if (inRange(beat, 144, 160)) h = 3 + fract(lightIndex / 7.0);
@@ -434,8 +409,6 @@ vec3 emissionPattern(vec4 uv, int lightIndex)
             for (int i = 0; i < 2; ++i) {
                 logoUv = abs(logoUv) - vec2(0.4, 1);
                 logoUv *= rot(TAU * 0.25 + float(lightIndex) + (beatPhase - 68) * (inRange(beat, 136, 208) || inRange(beat, 240, 256) ? 1 : 0));
-                // logoUv = abs(logoUv) - vec2(0.3);
-                // logoUv *= rot(0.5);
             }
         }
 
@@ -453,11 +426,6 @@ vec3 emissionPattern(vec4 uv, int lightIndex)
             offset = 10;
             count = 8;
         }
-
-        // if (inRange(beat, 100, 104))
-        // {
-        //     count = int(mix(0.0, float(count), saturate(sin(beatTau)) * (nBeat % 4 < 3 ? 1 : 0)));
-        // }
 
         if (inRange(beat, 104, 120) && lightIndex % 4 < 2) logoUv *= rot(TAU * 0.5);
 
@@ -525,10 +493,6 @@ vec3 emissionPattern(vec4 uv, int lightIndex)
     if (inRange(beat, 96, 100))
     {
         col += vec3(saturate(sin(beatTau)) * (nBeat % 4 < 3 ? 1 : 0));
-    }
-
-    {
-        // col = hash42(uv).rgb * 0.1;
     }
 
     return 1.6 * col;
@@ -1120,8 +1084,6 @@ vec3 render(vec3 ro, vec3 rd, vec3 rdRight, vec3 rdUp)
         // N = vec3(0, 1, 0);
 
         // grid cell
-        // vec2 cell = floor(P.xz);
-        // float checker = mod(cell.x + cell.y, 2.0);
         vec2 gridDistance = abs(fract(P.xz + 0.5) - 0.5);
         float grid = min(gridDistance.x, gridDistance.y);
 
@@ -1171,8 +1133,6 @@ vec3 render(vec3 ro, vec3 rd, vec3 rdRight, vec3 rdUp)
                 baseColor = vec3(0.1);
                 roughness = 0.2;
                 // metallic = 1.0;
-                // P = ro + tmin * rd;
-                // N = calcNormal(p, eps);
             }
             break;
         }
@@ -1209,8 +1169,8 @@ vec3 render(vec3 ro, vec3 rd, vec3 rdRight, vec3 rdUp)
         // BOXの厚み部分は、発光面を囲む暗い筐体として表示する
         baseColor = vec3(0.1);
         roughness = 0.2;
-        // metallic = 1.0;
-        // P = ro + tmin * rd;
+
+        // 解析的に法線を求める版
         // N = normalize(
         //         closestLocalNormal.x * light.axisX
         //     + closestLocalNormal.y * light.axisY
