@@ -3,10 +3,10 @@
     "LTH" by gam0022 & kazpulse
     PC 8K Intro at Akiba Executable Party 2026
 
-    - MRT0 前フレームの MRT3 へ FXAA と Bloom を適用した最終表示色
-    - MRT1 8x8 の正規化 LUT と行列 LUT
+    - MRT0 前フレームの MRT3 へ ポストプロセス（FXAA と Bloom）を適用した最終表示色
+    - MRT1 LTC用のLUTとランダムノイズ（初期化時に生成して更新しない）
     - MRT2 発光模様 8x2の合計16枚のアトラス（模様領域はライトと同じ縦横比）
-    - MRT3 レンダリング直後のシーン色と Bloom マスク
+    - MRT3 RGB: 3Dシーンの描画結果, A: Bloom マスク
 */
 layout(binding = 0) uniform sampler2D backBuffer0;
 layout(binding = 1) uniform sampler2D backBuffer1;
@@ -74,8 +74,6 @@ mat3 rotationXYZ(vec3 rotation)
     return rz * ry * rx;
 }
 
-// float prevEndTime = 0.0, t = 0.0, blend = 0.0;
-// #define TL(end) if (t = beat - prevEndTime, blend = t / (end - prevEndTime), beat < (prevEndTime = end))
 float t = 0.0, blend = 0.0;
 bool inRange(float x, float start, float end)
 {
@@ -1385,12 +1383,6 @@ void main()
 
             position = mix(columnPosition, circlePosition, circleBlend);
             rotation = vec3(0.0, mix(columnRotationY, circleRotationY, circleBlend), 0.0);
-
-            // 一列に並べる場合
-            // vec3 linearPosition = vec3((i - 6) * COLUMN_SPACING, LIGHT_HEIGHT, -CIRCLE_RADIUS);
-            // float linearRotationY = 0.0;
-            // position = mix(mix(columnPosition, circlePosition, circleBlend), linearPosition, linearBlend);
-            // rotation = vec3(0.0, mix(mix(columnRotationY, circleRotationY, circleBlend), linearRotationY, linearBlend), 0.0);
         }
         else if (inRange(beat, 208, 224))
         {
@@ -1404,26 +1396,6 @@ void main()
 
             rotation = vec3(TAU * 0.75 - circleAngle, 0.0, TAU * 0.25);
         }
-        // else if (inRange(beat, 224, 240))
-        // {
-        //     // 八芒星上の移動
-        //     float starT = fract(float(i) / float(lightCount) + beat / 64.0) * 16.0;
-        //     float vertex = floor(starT);
-        //     float angle0 = vertex * TAU / 16.0;
-        //     float angle1 = angle0 + TAU / 16.0;
-        //     float angle2 = angle1 + TAU / 16.0;
-        //     float radius0 = mod(vertex, 2.0) < 1.0 ? 6.0 : 2.5;
-        //     float radius1 = mod(vertex, 2.0) < 1.0 ? 2.5 : 6.0;
-        //     float radius2 = radius0;
-        //     vec2 point0 = vec2(cos(angle0), sin(angle0)) * radius0;
-        //     vec2 point1 = vec2(cos(angle1), sin(angle1)) * radius1;
-        //     vec2 point2 = vec2(cos(angle2), sin(angle2)) * radius2;
-        //     float edgeT = fract(starT);
-        //     vec2 starPosition = mix(point0, point1, edgeT);
-        //     vec2 tangent = mix(point1 - point0, point2 - point1, smoothstep(0.75, 1.0, edgeT));
-        //     position = vec3(starPosition.x, 2, starPosition.y);
-        //     rotation.y = atan(tangent.x, tangent.y);
-        // }
         else if (inRange(beat, 224, 256))
         {
             // Torus Knot の上に配置する
