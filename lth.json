@@ -2,8 +2,8 @@
 	"app":	{
 		"graphicsShaderFileName":	".\\lth.gfx.glsl",
 		"soundShaderFileName":	"",
-		"sointuFileName":	"lth.yml",
-		"wavFileName":	"lth.wav",
+		"sointuFileName":	".\\lth.yml",
+		"wavFileName":	".\\lth.wav",
 		"xReso":	1280,
 		"yReso":	720
 	},
@@ -78,7 +78,7 @@
 		"replaceAlphaWithOne":	true
 	},
 	"captureSoundSettings":	{
-		"fileName":	"lth.wav",
+		"fileName":	".\\lth.wav",
 		"durationInSeconds":	87.428573608398438
 	},
 	"imGuiStatus":	{
